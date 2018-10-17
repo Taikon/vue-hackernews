@@ -1,18 +1,34 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <app-item v-for="story in stories" :key="story.data.id" class="whitebg media pad" :story="story"></app-item>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import axios from "axios";
+import Item from "@/components/Item";
 
 export default {
-  name: 'home',
+  name: "Home",
+  data() {
+    return {
+      err: "",
+      stories: this.$store.state.topStories
+    };
+  },
   components: {
-    HelloWorld
+    appItem: Item
+  },
+  created: function() {
+    if (this.$store.state.topStories.length === 0) {
+      this.$store.dispatch("FETCH_TOP_STORIES"); //Actions are executed with $store.dispatch("ACTION_NAME")
+    }
   }
-}
+};
 </script>
+
+<style scoped>
+.whitebg {
+  background-color: white;
+}
+</style>
